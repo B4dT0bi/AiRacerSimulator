@@ -5,26 +5,24 @@
 
 namespace sf
 {
-	class RenderWindow;
+class RenderWindow;
 }
-
 
 namespace mapEdit
 {
-	struct Action
-	{
-		Action();
+struct Action
+{
+	Action();
 
-		bool placeUnplace;
-		RoadBlock::rotation rotation;
-		RoadBlock::roadType rtype;
-		sf::Vector2f viewMove;
-	};
+	bool placeUnplace;
+	RoadBlock::rotation rotation;
+	RoadBlock::roadType rtype;
+	sf::Vector2f viewMove;
+};
 
-	void getEvents(sf::RenderWindow &window, Action &action);
+void getEvents(sf::RenderWindow &window, Action &action);
 
+void mapEdit(sf::RenderWindow &window);
+} // namespace mapEdit
 
-	void mapEdit(sf::RenderWindow &window);
-}
-
-#endif 
+#endif

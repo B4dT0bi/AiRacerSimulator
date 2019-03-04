@@ -7,41 +7,36 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/System/Time.hpp>
 
-
 class Timer
 {
-	public:
-		Timer();
-		Timer(const sf::Time &duration);
+  public:
+	Timer();
+	Timer(const sf::Time &duration);
 
-		void setDuration(const sf::Time &duration);
-		sf::Time getDuration() const;
+	void setDuration(const sf::Time &duration);
+	sf::Time getDuration() const;
 
-		
-		bool ticked(); //exceeded the specified duration
-		sf::Time getFullWaitedDuration() const;
-		sf::Time getExceededDuration() const;
+	bool ticked(); //exceeded the specified duration
+	sf::Time getFullWaitedDuration() const;
+	sf::Time getExceededDuration() const;
 
-		void restart();
+	void restart();
 
-		sf::Time swapTime();
+	sf::Time swapTime();
 
-		void autoSleep();
+	void autoSleep();
 
+	//global clock that will be followed by all of the timers
+	static sf::Clock programClock;
 
-		//global clock that will be followed by all of the timers
-		static sf::Clock programClock;
+	static sf::Time globalTime();
 
-		static sf::Time globalTime();
+  private:
+	sf::Time m_duration;
 
+	sf::Time m_startingTimeShift; //shift from the programClock
 
-	private:
-		sf::Time m_duration;
-
-		sf::Time m_startingTimeShift; //shift from the programClock
-		
-		sf::Time m_oldTime; //Last time the clock ticked
+	sf::Time m_oldTime; //Last time the clock ticked
 };
-
 
 #endif //DEF_TIMER_HPP

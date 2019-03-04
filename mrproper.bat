@@ -1,1 +1,0 @@
-erase carRacing.exe

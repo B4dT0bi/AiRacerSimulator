@@ -11,32 +11,25 @@
 
 #include <vector>
 
-
 class RoadBlock;
 
-
-class RoadBox: public sf::Transformable //be careful with SFML transformations, none shall be used from a outside
+class RoadBox : public sf::Transformable //be careful with SFML transformations, none shall be used from a outside
 {
-	public:
-		RoadBox(const RoadBlock &roadBlock);
+  public:
+	RoadBox(const RoadBlock &roadBlock);
 
-		const std::vector<collision::LineHitBox> & getLineArray() const;
-	
-		/*
+	const std::vector<collision::LineHitBox> &getLineArray() const;
+
+	/*
 		These variables are initialized on program start.
 		They represent the different standard hitBoxes of RoadBlocks.
 		*/
-		static const std::vector<collision::LineHitBox> bigArcHitBox;
-		static const std::vector<collision::LineHitBox> smallArcHitBox;
-		static const std::vector<collision::LineHitBox> straightHitBox;
+	static const std::vector<collision::LineHitBox> bigArcHitBox;
+	static const std::vector<collision::LineHitBox> smallArcHitBox;
+	static const std::vector<collision::LineHitBox> straightHitBox;
 
-	private:
-		std::vector<collision::LineHitBox> m_hitBox;
-		
+  private:
+	std::vector<collision::LineHitBox> m_hitBox;
 };
-
-
-
-
 
 #endif //DEF_ROADBOX_HPP
