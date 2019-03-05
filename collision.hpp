@@ -7,6 +7,7 @@
 #define DEF_COLLISION_HPP
 
 #include <SFML/Graphics/Rect.hpp>
+#include <vector>
 //#include "RoadBox.hpp"
 
 class RoadBox;
@@ -55,6 +56,9 @@ bool collision(const sf::Vector2f &point, const CircleHitBox &cercleBox);
 bool collision(const CircleHitBox &cercleBox1, const CircleHitBox &cercleBox2);
 
 bool collision(const CircleHitBox &circleBox, const RoadBox &roadBox, LineHitBox &lineBox);
+
+sf::Vector2f minHitPoint(const LineHitBox &lineHitBox, const std::vector<collision::LineHitBox> &roadLines);
+float calcDistance(const sf::Vector2f pointA, const sf::Vector2f pointB);
 
 //project p on lineBox
 sf::Vector2f projection(const LineHitBox &lineBox, const sf::Vector2f &p);

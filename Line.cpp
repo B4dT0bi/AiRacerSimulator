@@ -40,12 +40,13 @@ void Line::update(sf::Vector2f A, sf::Vector2f B)
 	mExtendedB = extendLine(A, B, -1000);
 }
 
-collision::LineHitBox Line::getHitBoxA() const
+collision::LineHitBox Line::getHitBoxA(const sf::Vector2f pos) const
 {
-	return collision::LineHitBox(mOriginalA, mExtendedA);
+	return collision::LineHitBox (mOriginalA + pos, mExtendedA + pos);
+
 }
 
-collision::LineHitBox Line::getHitBoxB() const
+collision::LineHitBox Line::getHitBoxB(const sf::Vector2f pos) const
 {
-	return collision::LineHitBox(mOriginalB, mExtendedB);
+	return collision::LineHitBox(mOriginalB + pos, mExtendedB + pos);
 }

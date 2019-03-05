@@ -88,8 +88,8 @@ RoadBox::RoadBox(const RoadBlock &roadBlock)
 	//to get the right hit box, we need to transform the default hit box, because no rotation is in it
 	sf::Transform transf;
 	transf.rotate(roadBlock.getRotationAsDegrees(), sf::Vector2f(RoadBlock::texSize / 2));
-	std::cout<< (RoadBlock::texSize/2).x<< " ; "<< (RoadBlock::texSize/2).y<< '\n';
-	std::cout<< roadBlock.sf::Transformable::getRotation()<< '\n';
+	//std::cout<<"RoadBlock::texSize/2 "<< (RoadBlock::texSize/2).x<< " ; "<< (RoadBlock::texSize/2).y<< '\n';
+	//std::cout<<"roadBlock.sf::Transformable::getRotation() " << roadBlock.sf::Transformable::getRotation()<< '\n';
 
 	RoadBlock::roadType t = roadBlock.getRType();
 	switch (t)

@@ -218,6 +218,70 @@ sf::Vector2f normale(const LineHitBox &lineBox, const sf::Vector2f &p)
 	return N;
 }
 
+bool get_line_intersection(LineHitBox lineA, LineHitBox lineB, float *i_x, float *i_y)
+{
+    float s02_x, s02_y, s10_x, s10_y, s32_x, s32_y, s_numer, t_numer, denom, t;
+    s10_x = lineA.p2.x - lineA.p1.x;
+    s10_y = lineA.p2.y - lineA.p1.y;
+    s32_x = lineB.p2.x - lineB.p1.x;
+    s32_y = lineB.p2.y - lineB.p1.y;
+
+    denom = s10_x * s32_y - s32_x * s10_y;
+    if (denom == 0)
+        return false; // Collinear
+    bool denomPositive = denom > 0;
+
+    s02_x = lineA.p1.x - lineB.p1.x;
+    s02_y = lineA.p1.y - lineB.p1.y;
+    s_numer = s10_x * s02_y - s10_y * s02_x;
+    if ((s_numer < 0) == denomPositive)
+        return false; // No collision
+
+    t_numer = s32_x * s02_y - s32_y * s02_x;
+    if ((t_numer < 0) == denomPositive)
+        return false; // No collision
+
+    if (((s_numer > denom) == denomPositive) || ((t_numer > denom) == denomPositive))
+        return false; // No collision
+    // Collision detected
+    t = t_numer / denom;
+    if (i_x != NULL)
+        *i_x = lineA.p1.x + (t * s10_x);
+    if (i_y != NULL)
+        *i_y = lineA.p1.y + (t * s10_y);
+
+    return true;
+}
+
+sf::Vector2f minHitPoint(const LineHitBox &ray, const std::vector<collision::LineHitBox> &roadLines)
+{
+	float crrMinDist = std::numeric_limits<float>::max();
+	sf::Vector2f result;
+	float intersect_x;
+	float intersect_y;
+	for (unsigned int i = 0; i < roadLines.size(); i++)
+	{
+		std::cout<<"check for intersection ray  at x:"<<ray.p1.x<<" y:"<<ray.p1.y<<" x:"<<ray.p2.x<<" y:"<<ray.p2.y<<"\n";
+		std::cout<<"check for intersection road at x:"<<roadLines[i].p1.x<<" y:"<<roadLines[i].p1.y<<" x:"<<roadLines[i].p2.x<<" y:"<<roadLines[i].p2.y<<" road : "<<i<<"\n";
+		if (get_line_intersection(ray, roadLines[i], &intersect_x, &intersect_y)) {
+			std::cout<<"Found intersection at x:"<<intersect_x<<" y:"<<intersect_y<<"\n";
+			float dist = calcDistance(ray.p1, sf::Vector2f(intersect_x, intersect_y));
+			if (dist < crrMinDist) 
+			{
+				result.x = intersect_x;
+				result.y = intersect_y;
+				crrMinDist = dist;
+			}
+		}
+	}
+	return result;
+}
+
+float calcDistance(const sf::Vector2f pointA, const sf::Vector2f pointB) 
+{
+	return std::sqrt(std::pow(pointA.x - pointB.x, 2.0) + std::pow(pointA.y - pointB.y, 2.0));
+}
+
 sf::Vector2f bounceVector(const sf::Vector2f &v, const sf::Vector2f &N)
 
 {

@@ -17,8 +17,8 @@ class Line : public sf::Drawable, public sf::Transformable
 	Line();
 
 	void update(sf::Vector2f A, sf::Vector2f B);
-	collision::LineHitBox getHitBoxA() const;
-	collision::LineHitBox getHitBoxB() const;
+	collision::LineHitBox getHitBoxA(const sf::Vector2f pos) const;
+	collision::LineHitBox getHitBoxB(const sf::Vector2f pos) const;
 
   protected:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

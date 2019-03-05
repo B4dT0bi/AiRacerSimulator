@@ -20,7 +20,7 @@ Action::Action(float orien, int accel) : orientation(orien), acceleration(accel)
 {
 }
 
-void getEvents(sf::RenderWindow &window, Action &action)
+void getEvents(sf::RenderWindow &window, Action &action, Car &car)
 {
 	action.acceleration = 0;
 	action.orientation = 0;
@@ -37,6 +37,12 @@ void getEvents(sf::RenderWindow &window, Action &action)
 			{
 			case sf::Keyboard::Escape:
 				exit(EXIT_SUCCESS);
+				break;
+			case sf::Keyboard::H:
+				car.toggleShowHitbox();
+				break;
+			case sf::Keyboard::L:
+				car.toggleShowDistanceLines();
 				break;
 			default:
 				break;
@@ -103,7 +109,7 @@ void game(sf::RenderWindow &window)
 	//main loop
 	while (true)
 	{
-		getEvents(window, action);
+		getEvents(window, action, playerCar);
 
 		//game physic/////////////////////////////
 		playerCar.accelerate(action.acceleration);

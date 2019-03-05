@@ -8,6 +8,7 @@
 #include <sstream> //type conversion
 #include <iostream>
 #include <cassert>
+#include <vector>
 
 #include "Map.hpp"
 #include "collision.hpp"
@@ -17,6 +18,10 @@ Line m_line_back_left_to_right;
 Line m_line_front_left_to_right;
 Line m_line_diagonal1;
 Line m_line_diagonal2;
+Map *m_map;
+
+bool m_show_road_hitbox = false;
+bool m_show_distance_lines = false;
 
 Car::Car(sf::Texture &tex, float maxSpeed)
 {
@@ -46,45 +51,60 @@ void Car::rotate(float rot)
 {
 	m_rotation = rot;
 }
-Map *m_map;
 
 void Car::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	states.transform *= getTransform();
 	target.draw(m_sprite, states);
 
-	// front / back
-	target.draw(m_line_back_to_front, states);
-	// front sides
-	target.draw(m_line_front_left_to_right, states);
-	// back sides
-	target.draw(m_line_back_left_to_right, states);
-
-	// diagonal
-	target.draw(m_line_diagonal1, states);
-	target.draw(m_line_diagonal2, states);
-
-	// draw circle hitbox
-	for (Map::iterator it = m_map->begin(); it != m_map->end(); it++)
+	if (m_show_distance_lines) 
 	{
+		// front / back
+		target.draw(m_line_back_to_front, states);
+		// front sides
+		target.draw(m_line_front_left_to_right, states);
+		// back sides
+		target.draw(m_line_back_left_to_right, states);
 
-		const std::vector<collision::LineHitBox> &hitBox = it->getHitBox().getLineArray();
+		// diagonal
+		target.draw(m_line_diagonal1, states);
+		target.draw(m_line_diagonal2, states);
+	}
 
-		for (unsigned int i = 0; i < hitBox.size(); i++)
+	if (m_show_road_hitbox)
+	{
+		// draw circle hitbox
+		for (Map::iterator it = m_map->begin(); it != m_map->end(); it++)
 		{
-			if (hitBox[i].p1.x > 0 && hitBox[i].p1.y > 0)
+
+			const std::vector<collision::LineHitBox> &hitBox = it->getHitBox().getLineArray();
+
+			for (unsigned int i = 0; i < hitBox.size(); i++)
 			{
-				std::cout << "hitbox[" << i << "] p1 x=" << hitBox[i].p1.x << " y=" << hitBox[i].p1.y << "\n";
-				std::cout << "hitbox[" << i << "] p2 x=" << hitBox[i].p2.x << " y=" << hitBox[i].p2.y << "\n";
-				sf::Vertex line[2];
-				line[0].position = hitBox[i].p1;
-				line[0].color = sf::Color::Green;
-				line[1].position = hitBox[i].p2;
-				line[1].color = sf::Color::Green;
-				target.draw(line, 2, sf::Lines);
+				if (hitBox[i].p1.x > 0 && hitBox[i].p1.y > 0)
+				{
+					//std::cout << "hitbox[" << i << "] p1 x=" << hitBox[i].p1.x << " y=" << hitBox[i].p1.y << "\n";
+					//std::cout << "hitbox[" << i << "] p2 x=" << hitBox[i].p2.x << " y=" << hitBox[i].p2.y << "\n";
+					sf::Vertex line[2];
+					line[0].position = hitBox[i].p1;
+					line[0].color = sf::Color::Green;
+					line[1].position = hitBox[i].p2;
+					line[1].color = sf::Color::Green;
+					target.draw(line, 2, sf::Lines);
+				}
 			}
 		}
 	}
+}
+
+void Car::toggleShowDistanceLines()
+{
+	m_show_distance_lines = !m_show_distance_lines;
+}
+
+void Car::toggleShowHitbox()
+{
+	m_show_road_hitbox = !m_show_road_hitbox;
 }
 
 void Car::apply_physics(Map &map)
@@ -158,6 +178,23 @@ void Car::apply_physics(Map &map)
 		// diagonal
 		m_line_diagonal1.update(transformedTopLeft, transformedBottomRight);
 		m_line_diagonal2.update(transformedTopRight, transformedBottomLeft);
+
+		std::vector <collision::LineHitBox> roadHitBoxes;
+		sf::Vector2f pos(getPosition());
+
+		for (Map::iterator it = map.begin(); it != map.end() && !collided; it++)
+		{
+			std::vector<collision::LineHitBox> lines = it->getHitBox().getLineArray();
+			for (unsigned int i = 0; i < lines.size(); i++) 
+			{
+				roadHitBoxes.push_back(lines[i]);
+			}
+		}
+
+		sf::Vector2f minPoint = collision::minHitPoint(m_line_back_to_front.getHitBoxA(pos), roadHitBoxes);
+		float distance = collision::calcDistance(m_line_back_to_front.getHitBoxA(pos).p1, minPoint);
+		std::cout<<" min HitPoint x: " << minPoint.x<<" y:"<<minPoint.y<<" dist : "<<distance<<"\n";
+		// TODO : show hitPoint
 
 		m_acceleration = 0;
 		m_physicTimer.restart();
