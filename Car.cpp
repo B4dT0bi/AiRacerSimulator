@@ -18,6 +18,7 @@ Line m_line_back_left_to_right;
 Line m_line_front_left_to_right;
 Line m_line_diagonal1;
 Line m_line_diagonal2;
+
 Map *m_map;
 
 bool m_show_road_hitbox = false;
@@ -40,6 +41,12 @@ Car::Car(sf::Texture &tex, float maxSpeed)
 
 	m_physicTimer.setDuration(sf::seconds(1. / 60.)); //60 fps
 	m_physicTimer.restart();
+
+	for (unsigned int i = 0; i < 10; i++)
+	{
+		m_hitPoint[i].setFillColor(sf::Color::Red);
+		m_hitPoint[i].setRadius(5.);
+	}
 }
 
 void Car::accelerate(float accel)
@@ -57,7 +64,7 @@ void Car::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	states.transform *= getTransform();
 	target.draw(m_sprite, states);
 
-	if (m_show_distance_lines) 
+	if (m_show_distance_lines)
 	{
 		// front / back
 		target.draw(m_line_back_to_front, states);
@@ -69,6 +76,10 @@ void Car::draw(sf::RenderTarget &target, sf::RenderStates states) const
 		// diagonal
 		target.draw(m_line_diagonal1, states);
 		target.draw(m_line_diagonal2, states);
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			target.draw(m_hitPoint[i]);
+		}
 	}
 
 	if (m_show_road_hitbox)
@@ -168,33 +179,39 @@ void Car::apply_physics(Map &map)
 		//std::cout << "ttr x:" << transformedTopRight.x << " y:" << transformedTopRight.y << "\n";
 		//std::cout << "tbl x:" << transformedBottomLeft.x << " y:" << transformedBottomLeft.y << "\n";
 		//std::cout << "tbr x:" << transformedBottomRight.x << " y:" << transformedBottomRight.y << "\n";
-		// front / back
-		m_line_back_to_front.update(transformedMidLeft, transformedMidRight);
-		// front sides
-		m_line_front_left_to_right.update(transformedTopRight, transformedBottomRight);
-		// back sides
-		m_line_back_left_to_right.update(transformedTopLeft, transformedBottomLeft);
 
-		// diagonal
-		m_line_diagonal1.update(transformedTopLeft, transformedBottomRight);
-		m_line_diagonal2.update(transformedTopRight, transformedBottomLeft);
-
-		std::vector <collision::LineHitBox> roadHitBoxes;
-		sf::Vector2f pos(getPosition());
+		std::vector<collision::LineHitBox> roadHitBoxes;
 
 		for (Map::iterator it = map.begin(); it != map.end() && !collided; it++)
 		{
 			std::vector<collision::LineHitBox> lines = it->getHitBox().getLineArray();
-			for (unsigned int i = 0; i < lines.size(); i++) 
+			for (unsigned int i = 0; i < lines.size(); i++)
 			{
 				roadHitBoxes.push_back(lines[i]);
 			}
 		}
 
-		sf::Vector2f minPoint = collision::minHitPoint(m_line_back_to_front.getHitBoxA(pos), roadHitBoxes);
-		float distance = collision::calcDistance(m_line_back_to_front.getHitBoxA(pos).p1, minPoint);
-		std::cout<<" min HitPoint x: " << minPoint.x<<" y:"<<minPoint.y<<" dist : "<<distance<<"\n";
-		// TODO : show hitPoint
+		// front / back
+		m_line_back_to_front.update(transformedMidLeft, transformedMidRight, roadHitBoxes, getTransform());
+		// front sides
+		m_line_front_left_to_right.update(transformedTopRight, transformedBottomRight, roadHitBoxes, getTransform());
+		// back sides
+		m_line_back_left_to_right.update(transformedTopLeft, transformedBottomLeft, roadHitBoxes, getTransform());
+
+		// diagonal
+		m_line_diagonal1.update(transformedTopLeft, transformedBottomRight, roadHitBoxes, getTransform());
+		m_line_diagonal2.update(transformedTopRight, transformedBottomLeft, roadHitBoxes, getTransform());
+
+		m_hitPoint[0].setPosition(m_line_back_to_front.getWallhitA() - sf::Vector2f(5., 5.));
+		m_hitPoint[1].setPosition(m_line_back_to_front.getWallhitB() - sf::Vector2f(5., 5.));
+		m_hitPoint[2].setPosition(m_line_front_left_to_right.getWallhitA() - sf::Vector2f(5., 5.));
+		m_hitPoint[3].setPosition(m_line_front_left_to_right.getWallhitB() - sf::Vector2f(5., 5.));
+		m_hitPoint[4].setPosition(m_line_back_left_to_right.getWallhitA() - sf::Vector2f(5., 5.));
+		m_hitPoint[5].setPosition(m_line_back_left_to_right.getWallhitB() - sf::Vector2f(5., 5.));
+		m_hitPoint[6].setPosition(m_line_diagonal1.getWallhitA() - sf::Vector2f(5., 5.));
+		m_hitPoint[7].setPosition(m_line_diagonal1.getWallhitB() - sf::Vector2f(5., 5.));
+		m_hitPoint[8].setPosition(m_line_diagonal2.getWallhitA() - sf::Vector2f(5., 5.));
+		m_hitPoint[9].setPosition(m_line_diagonal2.getWallhitB() - sf::Vector2f(5., 5.));
 
 		m_acceleration = 0;
 		m_physicTimer.restart();

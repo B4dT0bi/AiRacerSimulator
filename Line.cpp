@@ -32,21 +32,44 @@ sf::Vector2f Line::extendLine(sf::Vector2f A, sf::Vector2f B, int len) const
 	return sf::Vector2f(x, y);
 }
 
-void Line::update(sf::Vector2f A, sf::Vector2f B)
+void Line::update(sf::Vector2f A, sf::Vector2f B, const std::vector <collision::LineHitBox> roadHitBoxes, const sf::Transform& transform)
 {
 	mOriginalA = A;
 	mOriginalB = B;
 	mExtendedA = extendLine(A, B, 1000);
 	mExtendedB = extendLine(A, B, -1000);
+	mWallhitA= collision::minHitPoint(getHitBoxA(transform), roadHitBoxes);
+	mDistanceToWallA = collision::calcDistance(getHitBoxA(transform).p1, mWallhitA);
+	mWallhitB= collision::minHitPoint(getHitBoxB(transform), roadHitBoxes);
+	mDistanceToWallB = collision::calcDistance(getHitBoxB(transform).p1, mWallhitB);
 }
 
-collision::LineHitBox Line::getHitBoxA(const sf::Vector2f pos) const
+collision::LineHitBox Line::getHitBoxA(const sf::Transform &transform) const
 {
-	return collision::LineHitBox (mOriginalA + pos, mExtendedA + pos);
-
+	return collision::LineHitBox(transform.transformPoint(mOriginalA), transform.transformPoint(mExtendedA));
 }
 
-collision::LineHitBox Line::getHitBoxB(const sf::Vector2f pos) const
+collision::LineHitBox Line::getHitBoxB(const sf::Transform &transform) const
 {
-	return collision::LineHitBox(mOriginalB + pos, mExtendedB + pos);
+	return collision::LineHitBox(transform.transformPoint(mOriginalB), transform.transformPoint(mExtendedB));
+}
+
+sf::Vector2f Line::getWallhitA() const
+{
+	return mWallhitA;
+}
+
+sf::Vector2f Line::getWallhitB() const
+{
+	return mWallhitB;
+}
+
+float Line::getDistanceToWallA() const
+{
+	return mDistanceToWallA;
+}
+
+float Line::getDistanceToWallB() const
+{
+	return mDistanceToWallB;
 }

@@ -16,10 +16,14 @@ class Line : public sf::Drawable, public sf::Transformable
   public:
 	Line();
 
-	void update(sf::Vector2f A, sf::Vector2f B);
-	collision::LineHitBox getHitBoxA(const sf::Vector2f pos) const;
-	collision::LineHitBox getHitBoxB(const sf::Vector2f pos) const;
+	void update(sf::Vector2f A, sf::Vector2f B, const std::vector <collision::LineHitBox> roadHitBoxes, const sf::Transform& transform);
+	collision::LineHitBox getHitBoxA(const sf::Transform& transform) const;
+	collision::LineHitBox getHitBoxB(const sf::Transform& transform) const;
 
+	sf::Vector2f getWallhitA() const;
+	sf::Vector2f getWallhitB() const;
+	float getDistanceToWallA() const;
+	float getDistanceToWallB() const;
   protected:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
@@ -29,6 +33,10 @@ class Line : public sf::Drawable, public sf::Transformable
 	sf::Vector2f mOriginalB;
 	sf::Vector2f mExtendedA;
 	sf::Vector2f mExtendedB;
+	sf::Vector2f mWallhitA;
+	sf::Vector2f mWallhitB;
+	float mDistanceToWallA;
+	float mDistanceToWallB;
 };
 
 #endif

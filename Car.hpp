@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 
 #include "Timer.hpp"
 #include "collision.hpp"
@@ -50,6 +51,7 @@ class Car : public sf::Drawable, public sf::Transformable
 	float m_rotation;
 
 	sf::Sprite m_sprite;
+	sf::CircleShape m_hitPoint[10];
 	
 	Timer m_physicTimer; //timer that permit the physics to apply at every frame
 
