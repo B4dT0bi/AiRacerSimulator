@@ -21,7 +21,6 @@ Line m_line_diagonal2;
 
 Map *m_map;
 
-bool m_show_road_hitbox = false;
 bool m_show_distance_lines = false;
 
 Car::Car(sf::Texture &tex, float maxSpeed)
@@ -81,41 +80,11 @@ void Car::draw(sf::RenderTarget &target, sf::RenderStates states) const
 			target.draw(m_hitPoint[i]);
 		}
 	}
-
-	if (m_show_road_hitbox)
-	{
-		// draw circle hitbox
-		for (Map::iterator it = m_map->begin(); it != m_map->end(); it++)
-		{
-
-			const std::vector<collision::LineHitBox> &hitBox = it->getHitBox().getLineArray();
-
-			for (unsigned int i = 0; i < hitBox.size(); i++)
-			{
-				if (hitBox[i].p1.x > 0 && hitBox[i].p1.y > 0)
-				{
-					//std::cout << "hitbox[" << i << "] p1 x=" << hitBox[i].p1.x << " y=" << hitBox[i].p1.y << "\n";
-					//std::cout << "hitbox[" << i << "] p2 x=" << hitBox[i].p2.x << " y=" << hitBox[i].p2.y << "\n";
-					sf::Vertex line[2];
-					line[0].position = hitBox[i].p1;
-					line[0].color = sf::Color::Green;
-					line[1].position = hitBox[i].p2;
-					line[1].color = sf::Color::Green;
-					target.draw(line, 2, sf::Lines);
-				}
-			}
-		}
-	}
 }
 
 void Car::toggleShowDistanceLines()
 {
 	m_show_distance_lines = !m_show_distance_lines;
-}
-
-void Car::toggleShowHitbox()
-{
-	m_show_road_hitbox = !m_show_road_hitbox;
 }
 
 void Car::apply_physics(Map &map)

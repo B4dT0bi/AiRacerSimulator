@@ -17,11 +17,11 @@ void Line::draw(sf::RenderTarget &target, sf::RenderStates states) const
 {
 	//states.transform *= getTransform();
 	sf::Vertex line[2];
-	line[0].position = mExtendedA;
+	line[0].position = mWallhitA;
 	line[0].color = sf::Color::Red;
-	line[1].position = mExtendedB;
+	line[1].position = mWallhitB;
 	line[1].color = sf::Color::Red;
-	target.draw(line, 2, sf::Lines, states);
+	target.draw(line, 2, sf::Lines);
 }
 
 sf::Vector2f Line::extendLine(sf::Vector2f A, sf::Vector2f B, int len) const

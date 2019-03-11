@@ -19,6 +19,7 @@ class Stats : public sf::Drawable, public sf::Transformable
 
   private:
 	sf::Text m_speedIndicator;
+	sf::Text m_score;
 	sf::Font m_font;
 	Car &m_car;
 };

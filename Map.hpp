@@ -32,6 +32,8 @@ class Map : public sf::Drawable
 	void saveToFile(const std::string &fileName);
 	void push_back(const RoadBlock &RdBk);
 
+	void toggleShowHitbox();
+
 	Map::iterator begin();
 	Map::iterator end();
 

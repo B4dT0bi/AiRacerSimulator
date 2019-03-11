@@ -35,7 +35,6 @@ class Car : public sf::Drawable, public sf::Transformable
 
 	float getSpeed() const;
 
-	void toggleShowHitbox();
 	void toggleShowDistanceLines();
 
   protected:

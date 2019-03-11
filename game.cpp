@@ -20,7 +20,7 @@ Action::Action(float orien, int accel) : orientation(orien), acceleration(accel)
 {
 }
 
-void getEvents(sf::RenderWindow &window, Action &action, Car &car)
+void getEvents(sf::RenderWindow &window, Action &action, Car &car, Map &map)
 {
 	action.acceleration = 0;
 	action.orientation = 0;
@@ -39,7 +39,7 @@ void getEvents(sf::RenderWindow &window, Action &action, Car &car)
 				exit(EXIT_SUCCESS);
 				break;
 			case sf::Keyboard::H:
-				car.toggleShowHitbox();
+				map.toggleShowHitbox();
 				break;
 			case sf::Keyboard::L:
 				car.toggleShowDistanceLines();
@@ -89,12 +89,12 @@ void game(sf::RenderWindow &window)
 
 	Map map(std::string("saveMap.pwet"));
 
-	std::cout << "map loaded " << map.begin()->getPosition().x << " ; " << map.begin()->getPosition().y << '\n';
+	//std::cout << "map loaded " << map.begin()->getPosition().x << " ; " << map.begin()->getPosition().y << '\n';
 
 	Car playerCar(texPlayerCar, 200);
 	Stats stats(playerCar);
 	playerCar.setPosition(sf::Vector2f(RoadBlock::texSize / 2));
-	std::cout << "playerCar " << playerCar.getPosition().x << " ; " << playerCar.getPosition().y << '\n';
+	//std::cout << "playerCar " << playerCar.getPosition().x << " ; " << playerCar.getPosition().y << '\n';
 	//sound loading
 
 	//music loading
@@ -109,7 +109,7 @@ void game(sf::RenderWindow &window)
 	//main loop
 	while (true)
 	{
-		getEvents(window, action, playerCar);
+		getEvents(window, action, playerCar, map);
 
 		//game physic/////////////////////////////
 		playerCar.accelerate(action.acceleration);

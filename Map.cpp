@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+bool m_show_road_hitbox = false;
+
 Map::Map()
 {
 }
@@ -71,6 +73,24 @@ void Map::draw(sf::RenderTarget &target, sf::RenderStates states) const
 	for (std::list<RoadBlock>::const_iterator it = m_BlockList.begin(); it != m_BlockList.end(); it++)
 	{
 		target.draw(*it, states);
+		if (m_show_road_hitbox)
+		{
+			// draw hitbox
+			const std::vector<collision::LineHitBox> &hitBox = it->getHitBox().getLineArray();
+
+			for (unsigned int i = 0; i < hitBox.size(); i++)
+			{
+				if (hitBox[i].p1.x > 0 && hitBox[i].p1.y > 0)
+				{
+					sf::Vertex line[2];
+					line[0].position = hitBox[i].p1;
+					line[0].color = sf::Color::Green;
+					line[1].position = hitBox[i].p2;
+					line[1].color = sf::Color::Green;
+					target.draw(line, 2, sf::Lines);
+				}
+			}
+		}
 	}
 }
 
@@ -103,6 +123,12 @@ Map::iterator Map::end()
 {
 	return m_BlockList.end();
 }
+
+void Map::toggleShowHitbox()
+{
+	m_show_road_hitbox = !m_show_road_hitbox;
+}
+
 
 /*
 namespace hidden
