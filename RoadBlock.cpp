@@ -7,6 +7,7 @@
 #include <iostream>
 
 const sf::Texture RoadBlock::straightTexture = createFromFile<sf::Texture>(STRAIGHT_TEXTURE_NAME);
+const sf::Texture RoadBlock::goalTexture = createFromFile<sf::Texture>(GOAL_TEXTURE_NAME);
 const sf::Texture RoadBlock::cornerTexture = createFromFile<sf::Texture>(CORNER_TEXTURE_NAME);
 const sf::Texture RoadBlock::grassTexture = createFromFile<sf::Texture>(GRASS_TEXTURE_NAME);
 
@@ -74,6 +75,9 @@ void RoadBlock::setType(roadType t)
 	{
 	case straight:
 		m_sprite.setTexture(RoadBlock::straightTexture);
+		break;
+	case goal:
+		m_sprite.setTexture(RoadBlock::goalTexture);
 		break;
 	case corner:
 		m_sprite.setTexture(RoadBlock::cornerTexture);
@@ -182,6 +186,9 @@ RoadBlock::roadType operator++(RoadBlock::roadType &r, int)
 		r = RoadBlock::corner;
 		break;
 	case RoadBlock::corner:
+		r = RoadBlock::goal;
+		break;
+	case RoadBlock::goal:
 		r = RoadBlock::straight;
 		break;
 	default:

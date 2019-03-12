@@ -94,6 +94,8 @@ RoadBox::RoadBox(const RoadBlock &roadBlock)
 	RoadBlock::roadType t = roadBlock.getRType();
 	switch (t)
 	{
+	case RoadBlock::goal:
+	// TODO : add goal hit lines (start / end) so we can see if a car has crossed the goalline in the right direction
 	case RoadBlock::straight:
 	{
 		m_hitBox.resize(straightHitBox.size());

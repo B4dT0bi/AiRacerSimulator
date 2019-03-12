@@ -19,6 +19,7 @@ class RoadBox : public sf::Transformable //be careful with SFML transformations,
 	RoadBox(const RoadBlock &roadBlock);
 
 	const std::vector<collision::LineHitBox> &getLineArray() const;
+	const std::vector<collision::LineHitBox> &getGoalLineArray() const;
 
 	/*
 		These variables are initialized on program start.
@@ -27,6 +28,7 @@ class RoadBox : public sf::Transformable //be careful with SFML transformations,
 	static const std::vector<collision::LineHitBox> bigArcHitBox;
 	static const std::vector<collision::LineHitBox> smallArcHitBox;
 	static const std::vector<collision::LineHitBox> straightHitBox;
+	static const std::vector<collision::LineHitBox> goalHitBox;
 
   private:
 	std::vector<collision::LineHitBox> m_hitBox;

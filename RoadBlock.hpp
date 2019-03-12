@@ -20,6 +20,7 @@ class RenderTarget;
 }
 
 static const std::string STRAIGHT_TEXTURE_NAME("gameData/images/straight.png");
+static const std::string GOAL_TEXTURE_NAME("gameData/images/goal.png");
 static const std::string CORNER_TEXTURE_NAME("gameData/images/corner1.png");
 static const std::string GRASS_TEXTURE_NAME("gameData/images/grass2.png");
 
@@ -29,7 +30,8 @@ class RoadBlock : public sf::Drawable, public sf::Transformable
 	enum roadType
 	{
 		straight = 0,
-		corner = 1
+		corner = 1,
+		goal = 2
 	};
 
 	enum rotation //clockwise
@@ -56,6 +58,7 @@ class RoadBlock : public sf::Drawable, public sf::Transformable
 
 	//standard shared textures
 	static const sf::Texture straightTexture;
+	static const sf::Texture goalTexture;
 	static const sf::Texture cornerTexture;
 	static const sf::Texture grassTexture;
 
