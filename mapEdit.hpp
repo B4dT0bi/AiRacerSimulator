@@ -2,6 +2,7 @@
 #define DEF_MAPEDIT_HPP
 
 #include "RoadBlock.hpp"
+#include <string>
 
 namespace sf
 {
@@ -22,7 +23,7 @@ struct Action
 
 void getEvents(sf::RenderWindow &window, Action &action);
 
-void mapEdit(sf::RenderWindow &window);
+void mapEdit(sf::RenderWindow &window, std::string &mapFile);
 } // namespace mapEdit
 
 #endif

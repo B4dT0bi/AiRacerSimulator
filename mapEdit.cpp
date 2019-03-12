@@ -86,7 +86,7 @@ void getEvents(sf::RenderWindow &window, Action &action)
 	}
 }
 
-void mapEdit(sf::RenderWindow &window)
+void mapEdit(sf::RenderWindow &window, std::string &mapFile)
 {
 	sf::View mapView(sf::FloatRect(0, 0, 800, 600));
 	window.setView(mapView);
@@ -150,6 +150,6 @@ void mapEdit(sf::RenderWindow &window)
 	}
 
 	//finally : save to file !
-	editedMap.saveToFile("saveMap.pwet");
+	editedMap.saveToFile(mapFile);
 }
 } // namespace mapEdit

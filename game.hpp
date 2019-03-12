@@ -33,7 +33,7 @@ struct Action
 
 void loadCars(std::vector<Car> &carsTab, std::vector<sf::Texture> &texTab);
 
-void game(sf::RenderWindow &window);
+void game(sf::RenderWindow &window, std::string &mapFile);
 
 void getEvents(sf::RenderWindow &window, Action &action);
 

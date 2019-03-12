@@ -73,7 +73,7 @@ void getEvents(sf::RenderWindow &window, Action &action, Car &car, Map &map)
 	}
 }
 
-void game(sf::RenderWindow &window)
+void game(sf::RenderWindow &window, std::string &mapFile)
 {
 	//view that will follow the car
 	sf::View carView(sf::FloatRect(0, 0, 800, 600));
@@ -87,7 +87,7 @@ void game(sf::RenderWindow &window)
 		throw OpenFileError();
 	}
 
-	Map map(std::string("saveMap.pwet"));
+	Map map(mapFile);
 
 	//std::cout << "map loaded " << map.begin()->getPosition().x << " ; " << map.begin()->getPosition().y << '\n';
 
@@ -111,29 +111,12 @@ void game(sf::RenderWindow &window)
 	{
 		getEvents(window, action, playerCar, map);
 
-		//game physic/////////////////////////////
 		playerCar.accelerate(action.acceleration);
 		playerCar.rotate(action.orientation);
 
 		playerCar.apply_physics(map);
 		stats.update();
 
-		//collisions tests
-		/*bool collided = false;
-			int i = 0;
-			for(Map::iterator it = map.begin(); it != map.end() && !collided; it++)
-			{	
-				collided = collision::collision(playerCar.getHitBox(), it->getHitBox());
-			}
-			if(collided)
-			{
-				std::cout<< ++j<<"\n";
-			}*/
-
-		// \game physics /////////////////////////
-
-		//game display////////////////////////////
-		//carView.setCenter(playerCar.getPosition());
 		window.setView(carView);
 
 		window.clear(sf::Color::White);
@@ -144,16 +127,7 @@ void game(sf::RenderWindow &window)
 
 		window.display();
 
-		// \game display//////////////////////////
-
-		//time handling///////////////////////////
-
 		loopTimer.autoSleep();
-		//while(!sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-		//	usleep(100);
-		//}
-
-		// \time handling/////////////////////////
 	}
 }
 
@@ -179,6 +153,3 @@ void loadCars(std::vector<Car> &carsTab, std::vector<sf::Texture> &texTab)
 
 } // namespace game
 
-void keepCarOnRoad(Car &car, Map &map, Map::iterator &it)
-{
-}

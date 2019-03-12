@@ -27,17 +27,20 @@ int main(int argc, char **argv)
 
 	//std::cout<< ' ';
 	//return 	EXIT_SUCCESS;
-
+	std::string mapFile("saveMap.pwet");
 	//replace the menu by program arguments for now
 	if (argc >= 2)
 	{
+		if (argc >= 3) {
+			mapFile = argv[2];
+		}
 		if (std::string(argv[1]) == std::string("play"))
 		{
-			game::game(window);
+			game::game(window, mapFile);
 		}
 		else if (std::string(argv[1]) == std::string("edit"))
 		{
-			mapEdit::mapEdit(window);
+			mapEdit::mapEdit(window, mapFile);
 		}
 		else
 		{
@@ -46,7 +49,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		game::game(window);
+		game::game(window, mapFile);
 	}
 
 	return EXIT_SUCCESS;
